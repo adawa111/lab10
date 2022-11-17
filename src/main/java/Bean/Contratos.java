@@ -4,7 +4,7 @@ public class Contratos {
 
     private String nroDeContrato;
 
-    private int idCliente;
+    private String idCliente;
 
     private int divisa;
 
@@ -20,11 +20,11 @@ public class Contratos {
         this.nroDeContrato = nroDeContrato;
     }
 
-    public int getIdCliente() {
+    public String getIdCliente() modif
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
 
