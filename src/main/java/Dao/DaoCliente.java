@@ -76,7 +76,7 @@ public class DaoCliente extends DaoBase{
         return expectedLoss;
     }
 
-    public void crearCredentialCliente(Credentials credencial, String password){
+    public void crearCredentialCliente(String user, String password){
 
         //Credentials credencial = new Credentials();
         String sql = "INSERT INTO credentials (nro_documento, password, hashedPassword, tipoUsuario) VALUES (?,?,sha2(?,256),?)";
@@ -84,10 +84,10 @@ public class DaoCliente extends DaoBase{
         try (Connection connection =this.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
-            pstmt.setString(1,credencial.getNumeroDocumento());
+            pstmt.setString(1,user);
             pstmt.setString(2,password);
             pstmt.setString(3,password);
-            pstmt.setInt(4,credencial.getTipoUsuario());
+            pstmt.setInt(4,2);
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

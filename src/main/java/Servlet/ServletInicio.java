@@ -46,6 +46,7 @@ public class ServletInicio extends HttpServlet {
                         view.forward(request,response);
                     }
                 }else {
+                    request.getSession().setAttribute("infono","Datos erroneos");
                     response.sendRedirect(request.getContextPath()+"/ServletInicio?error");
                 }
                 break;

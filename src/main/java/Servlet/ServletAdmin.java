@@ -24,10 +24,10 @@ public class ServletAdmin extends HttpServlet {
         DaoCliente cl = new DaoCliente();
         switch (action) {
             case "crear":
-
-
-                view = request.getRequestDispatcher("/arbitros/list.jsp");
-                view.forward(request, response);
+                String dni = request.getParameter("documento");
+                String pass = request.getParameter("password");
+                cl.crearCredentialCliente(dni,pass);
+                response.sendRedirect(request.getContextPath());
                 break;
 
         }

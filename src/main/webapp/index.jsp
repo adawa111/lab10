@@ -19,7 +19,7 @@
             </div>
             <%session.removeAttribute("infono");%>
             <%}%>
-            <form method="post" action="<%=request.getContextPath()%>/InicioServlet?action=login">
+            <form method="post" action="<%=request.getContextPath()%>/ServletInicio?action=login">
                 <div class="form-group">
                     <label>Usuario</label>
                     <input type="text" class="form-control" name="usuario">
@@ -29,7 +29,6 @@
                     <input class="form-control" name="password" type="text"/>
                 </div>
                 <button type="submit" class="btn btn-primary">Ingresar</button>
-                <a href="<%=request.getContextPath()%>/InicioServlet" class="btn btn-danger">Cancelar</a>
             </form>
         </div>
         <div class="col"></div>
