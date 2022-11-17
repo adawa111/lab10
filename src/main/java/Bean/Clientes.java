@@ -3,11 +3,20 @@ package Bean;
 public class Clientes {
 
     private String tipoCliente;
+
+    private String naju;
     private String edad;
     private String nombreCliente;
     private String tipoDocumento;
     private String nombreDocumento;
 
+    public String getNaju() {
+        return naju;
+    }
+
+    public void setNaju(String naju) {
+        this.naju = naju;
+    }
 
     public String getTipoCliente() {
         return tipoCliente;

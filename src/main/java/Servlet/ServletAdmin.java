@@ -26,8 +26,6 @@ public class ServletAdmin extends HttpServlet {
             case "crear":
 
 
-                request.setAttribute("listaArbitros",listaArbitros);
-                request.setAttribute("opciones",opciones);
                 view = request.getRequestDispatcher("/arbitros/list.jsp");
                 view.forward(request, response);
                 break;

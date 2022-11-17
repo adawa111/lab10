@@ -1,5 +1,8 @@
 package Servlet;
 
+import Bean.Clientes;
+import Dao.DaoCliente;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -11,49 +14,24 @@ public class ServletCliente extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
         RequestDispatcher view;
+        DaoCliente daocli = new DaoCliente();
         switch (action) {
             case "puntaje":
-                /*
-                Inserte su código aquí
-                 */
-                ArrayList<Arbitro> listaArbitros = null;
-                listaArbitros = arbitrosDao.listarArbitros();
 
-                request.setAttribute("listaArbitros",listaArbitros);
-                request.setAttribute("opciones",opciones);
-                view = request.getRequestDispatcher("/arbitros/list.jsp");
-                view.forward(request, response);
                 break;
             case "datos":
-                /*
-                Inserte su código aquí
-                 */
-                ArrayList<Arbitro> listaArbitros = null;
-                listaArbitros = arbitrosDao.listarArbitros();
-
-                request.setAttribute("listaArbitros",listaArbitros);
-                request.setAttribute("opciones",opciones);
-                view = request.getRequestDispatcher("/arbitros/list.jsp");
+                String id = request.getParameter("id");
+                Clientes clie = daocli.buscarCliente(id);
+                request.setAttribute("client",clie);
+                view = request.getRequestDispatcher("clientedatos.jsp");
                 view.forward(request, response);
                 break;
             case "contratos":
-                /*
-                Inserte su código aquí
-                */
-                request.setAttribute("paises",paises);
-                view = request.getRequestDispatcher("/arbitros/form.jsp");
-                view.forward(request, response);
+
                 break;
 
             case "estados":
-                /*
-                Inserte su código aquí
-                */
 
-                String id1 = request.getParameter("id");
-                int id = Integer.parseInt(id1);
-                arbitrosDao.borrarArbitro(id);
-                response.sendRedirect(request.getContextPath()+ "/ArbitroServlet");
                 break;
         }
 

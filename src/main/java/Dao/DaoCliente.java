@@ -20,10 +20,13 @@ public class DaoCliente extends DaoBase{
             client.setTipoCliente(rs1.getString("g4093_type"));
             client.setTipoDocumento(rs1.getString("g4093_documentType"));
             client.setNombreDocumento(rs1.getString("g4093_nro_id"));
-
+            if (Objects.equals(rs1.getString("g4093_type"), "N")){
+                client.setNaju("Natural");
+            } else if (Objects.equals(rs1.getString("g4093_type"), "J")) {
+                client.setNaju("Juridica");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-
         }
         return client;
     }
