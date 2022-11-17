@@ -1,5 +1,7 @@
 package Dao;
 import Bean.Clientes;
+import Bean.Credentials;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -70,5 +72,86 @@ public class DaoCliente extends DaoBase{
         }
         return expectedLoss;
     }
+
+    public void crearCredentialCliente(Credentials credencial, String password){
+
+        //Credentials credencial = new Credentials();
+        String sql = "INSERT INTO credentials (nro_documento, password, hashedPassword, tipoUsuario) VALUES (?,?,sha2(?,256),?)";
+
+        try (Connection connection =this.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1,credencial.getNumeroDocumento());
+            pstmt.setString(2,password);
+            pstmt.setString(3,password);
+            pstmt.setInt(4,credencial.getTipoUsuario());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+    }
+
+    public Credentials buscarUsuario(String numeroDocumento, String password){
+
+        Credentials credencial = new Credentials();
+        String sql = "Select * from credentials where nro_documento=? and password=?";
+        try(Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);) {
+
+            pstmt.setString(1, numeroDocumento) ;
+            pstmt.setString(2, password);
+
+            try (ResultSet rs = pstmt.executeQuery()){
+                while (rs.next()){
+
+                    credencial.setNumeroDocumento(rs.getString(1));
+                    credencial.set
+
+                }
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        }
+        return credencial;
+    }
+
+
+    public Usuario ingresarLogin(String username, String password){
+
+        Usuario usuario = null;
+
+        //antes del sql se debe hashear el password para comparar los hashes
+        String sql = "select * from Usuarios where correo=? and password=sha2(?,256)";
+
+        try (Connection connection = this.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql);) {
+
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String codigo = rs.getString(1);
+                    System.out.println(codigo);
+                    usuario=buscarPorId(codigo);
+                    System.out.println(usuario);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return usuario;
+
+    }
+
+
+
 
 }
