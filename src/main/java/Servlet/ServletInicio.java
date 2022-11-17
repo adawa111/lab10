@@ -24,25 +24,7 @@ public class ServletInicio extends HttpServlet {
                 view = request.getRequestDispatcher("/arbitros/list.jsp");
                 view.forward(request, response);
                 break;
-            case "crear":
-                /*
-                Inserte su código aquí
-                */
-                request.setAttribute("paises",paises);
-                view = request.getRequestDispatcher("/arbitros/form.jsp");
-                view.forward(request, response);
-                break;
 
-            case "borrar":
-                /*
-                Inserte su código aquí
-                */
-
-                String id1 = request.getParameter("id");
-                int id = Integer.parseInt(id1);
-                arbitrosDao.borrarArbitro(id);
-                response.sendRedirect(request.getContextPath()+ "/ArbitroServlet");
-                break;
         }
     }
 

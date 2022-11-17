@@ -106,12 +106,14 @@ public class DaoCliente extends DaoBase{
             pstmt.setString(2, password);
 
             try (ResultSet rs = pstmt.executeQuery()){
-                while (rs.next()){
-
-                    credencial.setNumeroDocumento(rs.getString(1));
-                    credencial.set
-
+                while (rs.next()) {
+                    if ((Objects.equals(numeroDocumento, rs.getString("nro_documento"))) & (Objects.equals(password, rs.getString("password")))) {
+                        credencial.setNumeroDocumento(rs.getString(1));
+                        credencial.setTipoUsuario(rs.getInt("tipoUsuario"));
+                        break;
+                    }
                 }
+
             }
 
 
