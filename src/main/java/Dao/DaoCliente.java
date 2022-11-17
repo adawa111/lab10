@@ -1,40 +1,10 @@
 package Dao;
 import Bean.Clientes;
-import Dao.DaoBase;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
+public class DaoCliente extends DaoBase{
 
-public class Clientes extends DaoBase {
-    public int partidosIguales(Partido encuentro){
-        int iguales = 0;
-        ArrayList<Partido> partidos = listaDePartidos();
-        for (Partido par : partidos){
-            if ((par.getArbitro().getIdArbitro() == encuentro.getArbitro().getIdArbitro()) & Objects.equals(par.getFecha(), encuentro.getFecha()) & (par.getNumeroJornada() == encuentro.getNumeroJornada()) & (par.getSeleccionLocal().getIdSeleccion() == encuentro.getSeleccionLocal().getIdSeleccion()) & (par.getSeleccionVisitante().getIdSeleccion()==encuentro.getSeleccionVisitante().getIdSeleccion())){
-                iguales=1;
-                System.out.println(iguales);
-                break;
-            }
-        }
-        return iguales;
-    }
-    public Arbitro obtenerArbitro(int id){
-        Arbitro refere = new Arbitro();
-        String sql1 = "Select * from arbitro where idArbitro ="+id;
-        try(Connection con1 = this.getConnection();
-            Statement stm1 = con1.createStatement();
-            ResultSet rs1 = stm1.executeQuery(sql1)) {
-            rs1.next();
-            refere.setIdArbitro(id);
-            refere.setNombre(rs1.getString("nombre"));
-            refere.setPais(rs1.getString("pais"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-
-        }
-        return refere;
-    }
     public Clientes buscarCliente(String id){
         Clientes client = new Clientes();
         String sql1 = "Select * from jm_client_bii where g4093_nro_id ="+id;
@@ -43,80 +13,49 @@ public class Clientes extends DaoBase {
             ResultSet rs1 = stm.executeQuery(sql1)) {
             rs1.next();
             int idd = Integer.parseInt(id);
-            esta.setIdEstadio(idd);
-            esta.setClub(rs1.getString("club"));
-            esta.setProvincia(rs1.getString("provincia"));
-            esta.setNombre(rs1.getString("nombre"));
+            client.setNombreCliente(rs1.getString("g4093_name"));
+            client.setEdad(rs1.getString("g4093_age"));
+            client.setTipoCliente(rs1.getString("g4093_type"));
+            client.setTipoDocumento(rs1.getString("g4093_documentType"));
+            client.setNombreDocumento(rs1.getString("g4093_nro_id"));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
 
         }
-        return esta;
+        return client;
     }
 
-    public Seleccion obtenerSeleccion(int id){
-        Seleccion sele = new Seleccion();
-        String sql1 = "select * from seleccion where idSeleccion ="+id;
-        try(Connection con = this.getConnection();
-            Statement stm = con.createStatement();
-            ResultSet rs1 = stm.executeQuery(sql1)) {
-            rs1.next();
-            sele.setIdSeleccion(id);
-            sele.setNombre(rs1.getString("nombre"));;
-            sele.setTecnico(rs1.getString("tecnico"));
-            sele.setEstadio(obtenerEstadio(rs1.getString("estadio_idEstadio")));
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return sele;
-    }
-    public ArrayList<Partido> listaDePartidos() {
-
-        ArrayList<Partido> partidos = new ArrayList<>();
-        String sql = "select * from partido";
+    public ArrayList<Clientes> listarClientes (){
+        ArrayList<Clientes> listaClientes = new ArrayList<>();
+        String sql = "select g4093_nro_id, g4093_name, g4093_age, g4093_type, g4093_documentType " +
+                "from jm_client_bii" +
+                "where g4093_nro_id Not in (Select nro_documento from credentials)";
         try (Connection conn = this.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql);){
-            while (rs.next()) {
-                Partido match = new Partido();
-                match.setIdPartido(rs.getInt("idPartido"));
-                match.setSeleccionLocal(obtenerSeleccion(rs.getInt("seleccionLocal")));
-                Seleccion local = obtenerSeleccion(rs.getInt("seleccionVisitante"));
-                Seleccion vistante = obtenerSeleccion(rs.getInt("seleccionLocal"));
-                match.setSeleccionLocal(local);
-                match.getSeleccionLocal().getNombre();
-                match.setSeleccionVisitante(vistante);
-                match.getSeleccionVisitante().getNombre();
-                Arbitro ar = obtenerArbitro(rs.getInt("arbitro"));
-                match.setArbitro(ar);
-                match.setFecha(rs.getString("fecha"));
-                match.setNumeroJornada(rs.getInt("numeroJornada"));
-                partidos.add(match);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            while (rs.next()){
+                Clientes cli = new Clientes();
+                cli.setNombreCliente(rs.getString("g4093_name"));
+                cli.setEdad(rs.getString("g4093_age"));
+                cli.setTipoCliente(rs.getString("g4093_type"));
+                cli.setTipoDocumento(rs.getString("g4093_documentType"));
+                cli.setNombreDocumento(rs.getString("g4093_nro_id"));
+                listaClientes.add(cli);
             }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return partidos;
+
+        return listaClientes;
     }
 
-    public void crearPartido(Partido partido) {
+    public float mostrarMaxExpectedLoss (String id){
+        float expectedLoss = 0;
+        String sql = "select * from jm_values"
 
-        String sql = "insert into partido (idPartido,seleccionLocal,seleccionVisitante,arbitro,fecha,numeroJornada) values (?,?,?,?,?,?)";
-        try (Connection connection = this.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            //falta latitud y longitud
-            pstmt.setInt(1, partido.getIdPartido());
-            pstmt.setInt(2,partido.getSeleccionLocal().getIdSeleccion());
-            pstmt.setInt(3,partido.getSeleccionVisitante().getIdSeleccion());
-            pstmt.setInt(4,partido.getArbitro().getIdArbitro());
-            pstmt.setString(5,partido.getFecha());;
-            pstmt.setInt(6,partido.getNumeroJornada());
-            pstmt.executeUpdate();
-        } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
+        return expectedLoss;
     }
+
 }
