@@ -2,7 +2,7 @@ package Bean;
 
 public class Clientes {
 
-    private String tipoCliente;
+    private String tipoClientes;
     private String edad;
     private String nombreCliente;
     private String tipoDocumento;
