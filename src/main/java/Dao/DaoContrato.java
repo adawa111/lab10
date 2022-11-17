@@ -1,6 +1,7 @@
 package Dao;
 import Bean.Clientes;
 import Bean.Contratos;
+import Dtos.CantidadContratosDto;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -43,5 +44,37 @@ public class DaoContrato extends DaoBase{
 
     }
 
+
+    public ArrayList<CantidadContratosDto> mostrarContratosxEstado() {
+
+        ArrayList<CantidadContratosDto> listaContraEstados = new ArrayList<>();
+        String sql="SELECT client_nro_id,  \n" +
+                "case when G6789_status='0' then 'Normal' when G6789_status='1' then 'cura' when G6789_status='2' then 'mora' else 'NA' end as 'EstadoContrato', count(G6789_status) as 'cantidad contratos' \n" +
+                "FROM bi_corp_business.jm_cotr_bis contrato \n" +
+                "inner join jm_values valores on contrato.g6789_contract = valores.jm_cotr_bis_g6789_cod_nup group by G6789_status;";
+
+        try (Connection conn = this.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql);){
+
+            while (rs.next()) {
+                Contratos contrato = new Contratos();
+                CantidadContratosDto ccd = new CantidadContratosDto();
+                contrato.setIdCliente(rs.getString(1));
+                ccd.setEstado(rs.getString(2));
+                ccd.setCantidadContrato(rs.getInt(3));
+
+                listaContraEstados.add(ccd);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listaContraEstados;
+
+
+
+    }
 
 }
