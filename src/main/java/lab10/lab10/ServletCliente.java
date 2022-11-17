@@ -1,4 +1,4 @@
-package Servlet;
+package lab10.lab10;
 
 import Bean.Clientes;
 import Bean.Contratos;

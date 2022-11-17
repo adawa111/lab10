@@ -1,4 +1,4 @@
-package Servlet;
+package lab10.lab10;
 
 import Bean.Clientes;
 import Bean.Credentials;
@@ -39,15 +39,15 @@ public class ServletInicio extends HttpServlet {
                         ArrayList<Clientes> listaclientes = null;
                         listaclientes = cli.listarClientes();
                         request.setAttribute("lista",listaclientes);
-                        view = request.getRequestDispatcher("admin.jsp");
+                        view = request.getRequestDispatcher("/admin.jsp");
                         view.forward(request,response);
                     } else if (a==2) {
-                        view = request.getRequestDispatcher("cliente.jsp");
+                        view = request.getRequestDispatcher("/cliente.jsp");
                         view.forward(request,response);
                     }
                 }else {
                     request.getSession().setAttribute("infono","Datos erroneos");
-                    response.sendRedirect(request.getContextPath()+"/ServletInicio?error");
+                    response.sendRedirect(request.getContextPath()+"/ServletInicio?");
                 }
                 break;
 
