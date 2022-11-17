@@ -12,7 +12,7 @@ public class ServletCliente extends HttpServlet {
         String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
         RequestDispatcher view;
         switch (action) {
-            case "lista":
+            case "puntaje":
                 /*
                 Inserte su código aquí
                  */
@@ -24,7 +24,19 @@ public class ServletCliente extends HttpServlet {
                 view = request.getRequestDispatcher("/arbitros/list.jsp");
                 view.forward(request, response);
                 break;
-            case "crear":
+            case "datos":
+                /*
+                Inserte su código aquí
+                 */
+                ArrayList<Arbitro> listaArbitros = null;
+                listaArbitros = arbitrosDao.listarArbitros();
+
+                request.setAttribute("listaArbitros",listaArbitros);
+                request.setAttribute("opciones",opciones);
+                view = request.getRequestDispatcher("/arbitros/list.jsp");
+                view.forward(request, response);
+                break;
+            case "contratos":
                 /*
                 Inserte su código aquí
                 */
@@ -33,7 +45,7 @@ public class ServletCliente extends HttpServlet {
                 view.forward(request, response);
                 break;
 
-            case "borrar":
+            case "estados":
                 /*
                 Inserte su código aquí
                 */
