@@ -26,8 +26,7 @@
                 </div>
                 <div class="form-group">
                     <label>Contraseña</label>
-                    <input class="form-control" name="password"
-                           type="text"/>
+                    <input class="form-control" name="password" type="text"/>
                 </div>
                 <button type="submit" class="btn btn-primary">Ingresar</button>
                 <a href="<%=request.getContextPath()%>/InicioServlet" class="btn btn-danger">Cancelar</a>
