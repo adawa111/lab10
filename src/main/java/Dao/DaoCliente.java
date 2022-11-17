@@ -53,8 +53,21 @@ public class DaoCliente extends DaoBase{
 
     public float mostrarMaxExpectedLoss (String id){
         float expectedLoss = 0;
-        String sql = "select * from jm_values"
+        String sql = "select * from jm_values " +
+                "where substring(jm_cotr_bis_g6789,len(jm_cotr_bis_g6789)-1,"+
+                id.length()+") = "+id;
+        try(Connection con = this.getConnection();
+            Statement stm = con.createStatement();
+            ResultSet rs1 = stm.executeQuery(sql)) {
+            rs1.next();
+            float valorpd = (rs1.getFloat("pd_value"));
+            float valorlgd = (rs1.getFloat("lgd_value"));
+            float tasa = (rs1.getFloat("recovery_rate"));
+            expectedLoss = valorpd*valorlgd*(1-tasa);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
 
+        }
         return expectedLoss;
     }
 
