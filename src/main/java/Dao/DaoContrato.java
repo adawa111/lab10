@@ -13,7 +13,14 @@ public class DaoContrato extends DaoBase{
     public ArrayList<Contratos> listarContratos() {
 
         ArrayList<Contratos> listaContratos = new ArrayList<>();
-        String sql = "SELECT * FROM bi_corp_business.jm_cotr_bis;";
+        String sql = "SELECT g6789_contract, g6789_currency,g6789_months, \n" +
+                "CASE\n" +
+                "    WHEN G6789_status = '0' THEN \"normal\"\n" +
+                "    WHEN G6789_status = '1' THEN \"cura\"\n" +
+                "    when G6789_status = '2' THEN \"mora\"\n" +
+                "    ELSE \"\"\n" +
+                "END as estado\n" +
+                "FROM bi_corp_business.jm_cotr_bis;";
         try (Connection conn = this.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql);){
@@ -21,30 +28,11 @@ public class DaoContrato extends DaoBase{
             while (rs.next()) {
                 Contratos contrato = new Contratos();
                 contrato.setNroDeContrato(rs.getString(1));
-                contrato.setIdCliente(rs.getString(2));
-                contrato.set
-                usuario.setCodigo(rs.getString(1));
-                usuario.setNombre(rs.getString(2));
+                contrato.setDivisa(rs.getString(2));
+                contrato.setMesesEnEseEstado(rs.getInt(3));
+                contrato.setEstado(rs.getInt(4));
 
-                usuario.setCorreo(rs.getString(4));
-
-                Rol rol = new Rol();
-                rol.setIdRol(rs.getInt(10));
-                rol.setNombreRol(rs.getString(11));
-                usuario.setRol(rol);
-
-                CategoriaPUCP categoriaPUCP = new CategoriaPUCP();
-                categoriaPUCP.setIdCategoria(rs.getInt(12));
-                categoriaPUCP.setNombreCategoria(rs.getString(13));
-                usuario.setCategoriaPUCP(categoriaPUCP);
-
-                FotoPerfil fotoPerfil = new FotoPerfil();
-                fotoPerfil.setIdFoto(rs.getInt(14));
-                fotoPerfil.setNombreFoto(rs.getString(15));
-                fotoPerfil.setFotobyte(rs.getBytes(16));
-                usuario.setFotoPerfil(fotoPerfil);
-
-                listaUsuarios.add(usuario);
+                listaContratos.add(contrato);
             }
 
         } catch (SQLException e) {
@@ -54,8 +42,6 @@ public class DaoContrato extends DaoBase{
         return listaContratos;
 
     }
-
-
 
 
 }
