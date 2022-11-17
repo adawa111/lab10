@@ -22,12 +22,12 @@
             <form method="post" action="<%=request.getContextPath()%>/InicioServlet?action=guardar">
                 <div class="form-group">
                     <label>Usuario</label>
-                    <input type="number" class="form-control" name="usuario">
+                    <input type="text" class="form-control" name="usuario">
                 </div>
                 <div class="form-group">
                     <label>Contraseña</label>
-                    <input class="form-control datetimepicker" id="fecha" name="password"
-                           type="date"/>
+                    <input class="form-control" name="password"
+                           type="text"/>
                 </div>
                 <button type="submit" class="btn btn-primary">Ingresar</button>
                 <a href="<%=request.getContextPath()%>/InicioServlet" class="btn btn-danger">Cancelar</a>
